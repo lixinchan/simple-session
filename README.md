@@ -19,7 +19,7 @@
 
         ```bash
         session.redis.host=localhost
-        session.redis.port=6370
+        session.redis.port=6379
         session.redis.pool.max.total=5
         session.redis.pool.max.idle=2
         session.redis.prefix=rsid
@@ -29,7 +29,7 @@
         ```xml
         <filter>
             <filter-name>RedisSessionFilter</filter-name>
-            <filter-class>com.dinfo.session.core.RedisSessionFilter</filter-class>
+            <filter-class>org.simple.session.core.RedisSessionFilter</filter-class>
             <init-param>
                 <param-name>sessionCookieName</param-name>
                 <param-value>rsid</param-value>
