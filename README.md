@@ -11,7 +11,7 @@
         <dependency>
            <groupId>org.simple.session</groupId>
                <artifactId>simple-session</artifactId>
-               <version>1.0-SNAPSHOT</version>
+               <version>0.0.1-SNAPSHOT</version>
         </dependency>
         ```
 

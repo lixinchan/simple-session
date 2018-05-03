@@ -6,10 +6,19 @@
 
     <groupId>org.simple.session</groupId>
     <artifactId>simple-session</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <name>simple-session</name>
     <url>http://maven.apache.org</url>
+
+    <description>simple-session</description>
+    <developers>
+        <developer>
+            <name>clx</name>
+            <email>brianchen.clx@gmail.com</email>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -60,11 +69,19 @@
         </plugins>
     </build>
 
-    <distributionManagement>
+    <repositories>
+        <repository>
+            <id>nexus</id>
+            <name>nexus-central</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
+
+    <!--<distributionManagement>
         <repository>
             <id>center</id>
             <name>center maven</name>
             <url>http://repo1.maven.org/maven2/</url>
         </repository>
-    </distributionManagement>
+    </distributionManagement>-->
 </project>
