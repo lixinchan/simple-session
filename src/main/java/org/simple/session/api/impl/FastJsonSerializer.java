@@ -18,6 +18,7 @@ import com.google.common.base.Throwables;
  * @author clx 2018/4/3.
  */
 public class FastJsonSerializer implements JsonSerializer {
+
 	private final static Logger log = LoggerFactory.getLogger(FastJsonSerializer.class);
 
 	private final ObjectMapper objectMapper;

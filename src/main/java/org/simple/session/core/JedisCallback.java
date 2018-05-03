@@ -7,12 +7,12 @@ import redis.clients.jedis.Jedis;
  * 
  * @author clx 2018/4/3.
  */
-public interface JedisCallback<V> {
+public interface JedisCallback<T> {
 	/**
 	 * Execute Callback
 	 * 
 	 * @param jedis
 	 * @return
 	 */
-	V execute(Jedis jedis);
+	T execute(Jedis jedis);
 }

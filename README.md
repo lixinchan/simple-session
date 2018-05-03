@@ -29,7 +29,7 @@
         ```xml
         <filter>
             <filter-name>RedisSessionFilter</filter-name>
-            <filter-class>org.simple.session.core.RedisSessionFilter</filter-class>
+            <filter-class>org.simple.session.core.filter.RedisSessionFilter</filter-class>
             <init-param>
                 <param-name>sessionCookieName</param-name>
                 <param-value>rsid</param-value>

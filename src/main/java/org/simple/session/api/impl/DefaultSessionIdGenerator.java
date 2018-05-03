@@ -18,7 +18,8 @@ import com.google.common.hash.Hashing;
  * @author clx 2018/4/3.
  */
 public class DefaultSessionIdGenerator implements SessionIdGenerator {
-	public static final Character SEPARATOR = 'Z';
+
+	public static final Character SEPARATOR = 'S';
 
 	private final String hostIpMd5;
 
@@ -37,7 +38,7 @@ public class DefaultSessionIdGenerator implements SessionIdGenerator {
 	 */
 	@Override
 	public String generate(HttpServletRequest request) {
-		StringBuilder builder = new StringBuilder(30);
+		StringBuilder builder = new StringBuilder(36);
 		String remoteIpMd5 = Hashing.md5().hashString(WebUtils.getClientIpAddr(request), Charsets.UTF_8).toString()
 				.substring(0, 8);
 		builder.append(remoteIpMd5).append(SEPARATOR).append(hostIpMd5).append(SEPARATOR)

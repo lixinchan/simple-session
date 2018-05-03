@@ -38,11 +38,11 @@ public class JedisPoolExecutor {
 		}
 	}
 
-	public <V> V execute(JedisCallback<V> cb) {
+	public <T> T execute(JedisCallback<T> callback) {
 		Jedis jedis = jedisPool.getResource();
 		boolean success = true;
 		try {
-			return cb.execute(jedis);
+			return callback.execute(jedis);
 		} catch (JedisException e) {
 			success = false;
 			if (jedis != null) {

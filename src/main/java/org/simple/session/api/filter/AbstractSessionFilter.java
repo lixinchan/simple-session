@@ -1,4 +1,4 @@
-package org.simple.session.api;
+package org.simple.session.api.filter;
 
 import java.io.IOException;
 import java.util.Map;
@@ -7,6 +7,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.simple.session.api.SessionManager;
 import org.simple.session.api.impl.RedisHttpServletRequest;
 import org.simple.session.api.impl.RedisHttpSession;
 import org.simple.session.util.WebUtils;
@@ -21,7 +22,8 @@ import com.google.common.base.Strings;
  * @author clx 2018/4/3.
  */
 public abstract class AbstractSessionFilter implements Filter {
-	private final static Logger log = LoggerFactory.getLogger(AbstractSessionFilter.class);
+
+	private final static Logger logger = LoggerFactory.getLogger(AbstractSessionFilter.class);
 
 	protected final static String SESSION_COOKIE_NAME = "sessionCookieName";
 
@@ -79,7 +81,7 @@ public abstract class AbstractSessionFilter implements Filter {
 			sessionManager = createSessionManager();
 			initAttrs(filterConfig);
 		} catch (Exception ex) {
-			log.error("failed to init session filter.", ex);
+			logger.error("failed to init session filter.", ex);
 			throw new ServletException(ex);
 		}
 	}
@@ -88,6 +90,7 @@ public abstract class AbstractSessionFilter implements Filter {
 	 * subclass create session manager
 	 * 
 	 * @return session manager
+	 * @throws IOException
 	 */
 	protected abstract SessionManager createSessionManager() throws IOException;
 
@@ -112,7 +115,7 @@ public abstract class AbstractSessionFilter implements Filter {
 		param = config.getInitParameter(COOKIE_MAX_AGE);
 		cookieMaxAge = Strings.isNullOrEmpty(param) ? DEFAULT_COOKIE_MAX_AGE : Integer.parseInt(param);
 
-		log.info("SessionFilter (sessionCookieName={},maxInactiveInterval={},cookieDomain={})", sessionCookieName,
+		logger.info("SessionFilter (sessionCookieName={}, maxInactiveInterval={}, cookieDomain={})", sessionCookieName,
 				maxInactiveInterval, cookieDomain);
 	}
 
@@ -140,20 +143,20 @@ public abstract class AbstractSessionFilter implements Filter {
 		if (session != null) {
 			if (!session.isValid()) {
 				// if invalidate , delete login cookie
-				log.debug("delete login cookie");
+				logger.debug("delete login cookie");
 				WebUtils.failureCookie(httpRequest, httpResponse, sessionCookieName, cookieDomain, cookieContextPath);
 			} else if (session.isDirty()) {
 				// should flush to store
-				if (log.isDebugEnabled()) {
-					log.debug("try to flush session to session store");
+				if (logger.isDebugEnabled()) {
+					logger.debug("try to flush session to session store");
 				}
 				Map<String, Object> snapshot = session.snapshot();
 				if (sessionManager.persist(session.getId(), snapshot, maxInactiveInterval)) {
-					if (log.isDebugEnabled()) {
-						log.debug("succeed to flush session {} to store, key is:{}", snapshot, session.getId());
+					if (logger.isDebugEnabled()) {
+						logger.debug("succeed to flush session {} to store, key is:{}", snapshot, session.getId());
 					}
 				} else {
-					log.error("failed to save session to redis");
+					logger.error("failed to save session to redis");
 					WebUtils.failureCookie(httpRequest, httpResponse, sessionCookieName, cookieDomain,
 							cookieContextPath);
 				}
@@ -166,7 +169,7 @@ public abstract class AbstractSessionFilter implements Filter {
 
 	@Override
 	public void destroy() {
-		log.info("filter is destroy.");
+		logger.info("filter is destroy.");
 		sessionManager.destroy();
 	}
 }

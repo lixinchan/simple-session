@@ -7,11 +7,16 @@ import java.util.Properties;
 
 import com.google.common.io.ByteSource;
 import com.google.common.io.Resources;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author clx 2018/4/3.
  */
 public class PropertiesReaderUtils {
+
+	private static final Logger logger = LoggerFactory.getLogger(PropertiesReaderUtils.class);
+
 	/**
 	 * read properties from classpath
 	 * 
@@ -28,12 +33,14 @@ public class PropertiesReaderUtils {
 			inputStream = byteSource.openBufferedStream();
 			properties.load(inputStream);
 		} catch (final IOException ioException) {
+			logger.error("load properties fail. properties path={}", classpath);
 			ioException.printStackTrace();
 		} finally {
 			if (inputStream != null) {
 				try {
 					inputStream.close();
 				} catch (final IOException e) {
+					logger.error("close inputStream fail.");
 					e.printStackTrace();
 				}
 			}

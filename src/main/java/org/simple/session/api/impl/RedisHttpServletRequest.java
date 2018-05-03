@@ -13,7 +13,8 @@ import org.slf4j.LoggerFactory;
  * @author clx 2018/4/3.
  */
 public class RedisHttpServletRequest extends HttpServletRequestWrapper {
-	private final static Logger log = LoggerFactory.getLogger(RedisHttpServletRequest.class);
+
+	private final static Logger logger = LoggerFactory.getLogger(RedisHttpServletRequest.class);
 
 	private HttpServletRequest request;
 
@@ -141,13 +142,13 @@ public class RedisHttpServletRequest extends HttpServletRequestWrapper {
 			Cookie cookie = WebUtils.findCookie(this, getSessionCookieName());
 			if (cookie != null) {
 				String value = cookie.getValue();
-				log.debug("Find session`s id from cookie.[{}]", value);
+				logger.debug("Find session's id from cookie.[{}]", value);
 				session = buildSession(value, false);
 			} else {
 				session = buildSession(create);
 			}
 		} else {
-			log.debug("Session[{}] was existed.", session.getId());
+			logger.debug("Session[{}] was existed.", session.getId());
 		}
 		return session;
 	}
@@ -181,7 +182,7 @@ public class RedisHttpServletRequest extends HttpServletRequestWrapper {
 	private RedisHttpSession buildSession(boolean create) {
 		if (create) {
 			session = buildSession(sessionManager.getSessionIdGenerator().generate(request), true);
-			log.debug("Build new session[{}].", session.getId());
+			logger.debug("Build new session[{}].", session.getId());
 			return session;
 		} else {
 			return null;

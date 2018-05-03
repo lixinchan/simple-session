@@ -1,6 +1,5 @@
 package org.simple.session.api;
 
-import java.io.IOException;
 import java.util.Properties;
 
 import org.simple.session.api.impl.DefaultSessionIdGenerator;
@@ -19,7 +18,7 @@ import com.google.common.base.Throwables;
  */
 public abstract class AbstractSessionManager implements SessionManager {
 
-	private final static Logger log = LoggerFactory.getLogger(AbstractSessionManager.class);
+	private final static Logger logger = LoggerFactory.getLogger(AbstractSessionManager.class);
 
 	private static final String DEFAULT_PROPERTIES = "session.properties";
 
@@ -27,7 +26,7 @@ public abstract class AbstractSessionManager implements SessionManager {
 
 	protected JsonSerializer jsonSerializer;
 
-	public AbstractSessionManager() throws IOException {
+	public AbstractSessionManager() {
 		this(DEFAULT_PROPERTIES);
 	}
 
@@ -35,23 +34,22 @@ public abstract class AbstractSessionManager implements SessionManager {
 	 * @param propertiesFile
 	 *            properties file in classpath, default is session.properties
 	 */
-	public AbstractSessionManager(String propertiesFile) throws IOException {
-		Properties props = PropertiesReaderUtils.read(propertiesFile);
-		initSessionIdGenerator(props);
-		initJsonSerializer(props);
-		init(props);
+	public AbstractSessionManager(String propertiesFile) {
+		Properties properties = PropertiesReaderUtils.read(propertiesFile);
+		initSessionIdGenerator(properties);
+		initJsonSerializer(properties);
+		init(properties);
 	}
 
 	/**
 	 * 提供一个构造函数，接受Properties作为入口参数
 	 * 
-	 * @param props
-	 * @throws IOException
+	 * @param properties
 	 */
-	public AbstractSessionManager(Properties props) throws IOException {
-		initSessionIdGenerator(props);
-		initJsonSerializer(props);
-		init(props);
+	public AbstractSessionManager(Properties properties) {
+		initSessionIdGenerator(properties);
+		initJsonSerializer(properties);
+		init(properties);
 	}
 
 	/**
@@ -60,25 +58,25 @@ public abstract class AbstractSessionManager implements SessionManager {
 	protected void init(Properties props) {
 	}
 
-	protected void initJsonSerializer(Properties props) {
-		String sessionSerializer = (String) props.get("session.serializer");
+	private void initJsonSerializer(Properties properties) {
+		String sessionSerializer = (String) properties.get("session.serializer");
 		if (Strings.isNullOrEmpty(sessionSerializer)) {
 			jsonSerializer = new FastJsonSerializer();
 		} else {
 			try {
 				jsonSerializer = (JsonSerializer) (Class.forName(sessionSerializer).newInstance());
 			} catch (Exception e) {
-				log.error("failed to init json generator: {}", Throwables.getStackTraceAsString(e));
+				logger.error("failed to init json generator: {}", Throwables.getStackTraceAsString(e));
 			} finally {
 				if (sessionIdGenerator == null) {
-					log.info("use default json serializer [FastJsonSerializer]");
+					logger.info("use default json serializer [FastJsonSerializer]");
 					jsonSerializer = new FastJsonSerializer();
 				}
 			}
 		}
 	}
 
-	protected void initSessionIdGenerator(Properties props) {
+	private void initSessionIdGenerator(Properties props) {
 		String sessionIdGeneratorClazz = (String) props.get("session.id.generator");
 		if (Strings.isNullOrEmpty(sessionIdGeneratorClazz)) {
 			sessionIdGenerator = new DefaultSessionIdGenerator();
@@ -86,10 +84,10 @@ public abstract class AbstractSessionManager implements SessionManager {
 			try {
 				sessionIdGenerator = (SessionIdGenerator) (Class.forName(sessionIdGeneratorClazz).newInstance());
 			} catch (Exception e) {
-				log.error("failed to init session id generator: {}", Throwables.getStackTraceAsString(e));
+				logger.error("failed to init session id generator: {}", Throwables.getStackTraceAsString(e));
 			} finally {
 				if (sessionIdGenerator == null) {
-					log.info("use default session id generator[DefaultSessionIdGenerator]");
+					logger.info("use default session id generator[DefaultSessionIdGenerator]");
 					sessionIdGenerator = new DefaultSessionIdGenerator();
 				}
 			}

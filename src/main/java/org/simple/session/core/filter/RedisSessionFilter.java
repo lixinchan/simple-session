@@ -1,10 +1,11 @@
-package org.simple.session.core;
+package org.simple.session.core.filter;
 
 import java.io.IOException;
 import java.util.Properties;
 
-import org.simple.session.api.AbstractSessionFilter;
+import org.simple.session.api.filter.AbstractSessionFilter;
 import org.simple.session.api.SessionManager;
+import org.simple.session.core.RedisSessionManager;
 
 /**
  * Redis Session Filter based on Redis
@@ -12,13 +13,14 @@ import org.simple.session.api.SessionManager;
  * @author clx 2018/4/3.
  */
 public class RedisSessionFilter extends AbstractSessionFilter {
-	private Properties prop;
+
+	private Properties properties;
 
 	public RedisSessionFilter() {
 	}
 
-	public RedisSessionFilter(Properties prop) {
-		this.prop = prop;
+	public RedisSessionFilter(Properties properties) {
+		this.properties = properties;
 	}
 
 	/**
@@ -28,8 +30,8 @@ public class RedisSessionFilter extends AbstractSessionFilter {
 	 */
 	@Override
 	protected SessionManager createSessionManager() throws IOException {
-		if (prop != null) {
-			return new RedisSessionManager(prop);
+		if (properties != null) {
+			return new RedisSessionManager(properties);
 		}
 		return new RedisSessionManager();
 	}

@@ -8,11 +8,11 @@ import javax.servlet.http.HttpServletRequest;
  * @author clx 2018/4/3.
  */
 public interface SessionIdGenerator {
+
 	/**
 	 * 生成Session Id
 	 * 
 	 * @param request
-	 *            请求对象
 	 * @return session id
 	 */
 	String generate(HttpServletRequest request);

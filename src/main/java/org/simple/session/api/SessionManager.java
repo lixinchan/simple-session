@@ -10,6 +10,7 @@ import org.simple.session.api.impl.RedisHttpSession;
  * @author clx 2018/4/3.
  */
 public interface SessionManager {
+
 	/**
 	 * persist session to session store
 	 * 

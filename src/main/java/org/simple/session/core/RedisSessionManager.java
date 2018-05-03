@@ -25,7 +25,8 @@ import redis.clients.jedis.JedisPoolConfig;
  * @author clx 2018/4/3.
  */
 public class RedisSessionManager extends AbstractSessionManager {
-	private final static Logger log = LoggerFactory.getLogger(RedisSessionManager.class);
+
+	private final static Logger logger = LoggerFactory.getLogger(RedisSessionManager.class);
 
 	private static final String SENTINEL_MODE = "sentinel";
 
@@ -113,7 +114,8 @@ public class RedisSessionManager extends AbstractSessionManager {
 			});
 			return Boolean.TRUE;
 		} catch (Exception e) {
-			log.error("failed to delete session(key={}) in redis,cause:{}", sid, Throwables.getStackTraceAsString(e));
+			logger.error("failed to delete session(key={}) in redis,cause:{}", sid,
+					Throwables.getStackTraceAsString(e));
 			return Boolean.FALSE;
 		}
 	}
@@ -140,7 +142,7 @@ public class RedisSessionManager extends AbstractSessionManager {
 				}
 			});
 		} catch (Exception e) {
-			log.error("failed to find session(key={}) in redis, cause:{}", sid, Throwables.getStackTraceAsString(e));
+			logger.error("failed to find session(key={}) in redis, cause:{}", sid, Throwables.getStackTraceAsString(e));
 			throw new SessionException("get session failed", e);
 		}
 	}
@@ -163,7 +165,8 @@ public class RedisSessionManager extends AbstractSessionManager {
 				}
 			});
 		} catch (Exception e) {
-			log.error("failed to delete session(key={}) in redis,cause:{}", sid, Throwables.getStackTraceAsString(e));
+			logger.error("failed to delete session(key={}) in redis,cause:{}", sid,
+					Throwables.getStackTraceAsString(e));
 		}
 	}
 
@@ -187,7 +190,7 @@ public class RedisSessionManager extends AbstractSessionManager {
 				}
 			});
 		} catch (Exception e) {
-			log.error("failed to refresh expire time session(key={}) in redis,cause:{}", sessionId,
+			logger.error("failed to refresh expire time session(key={}) in redis,cause:{}", sessionId,
 					Throwables.getStackTraceAsString(e));
 		}
 	}
