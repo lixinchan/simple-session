@@ -9,6 +9,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +22,7 @@ import com.google.common.collect.ImmutableMap;
  */
 public class WebUtils {
 
-	private final static Logger log = LoggerFactory.getLogger(WebUtils.class);
+	private final static Logger logger = LoggerFactory.getLogger(WebUtils.class);
 
 	/**
 	 * Headers about client's IP
@@ -43,7 +44,7 @@ public class WebUtils {
 	public static String getClientIpAddr(HttpServletRequest request) {
 		for (String header : HEADERS_ABOUT_CLIENT_IP) {
 			String ip = request.getHeader(header);
-			if (ip != null && ip.length() != 0 && !"unknown".equalsIgnoreCase(ip)) {
+			if (StringUtils.isNotBlank(ip) && StringUtils.equalsIgnoreCase("unknown", ip)) {
 				return ip;
 			}
 		}
@@ -97,11 +98,19 @@ public class WebUtils {
 
 	/**
 	 * add a cookie
+	 * 
+	 * @param request
+	 * @param response
+	 * @param name
+	 * @param value
+	 * @param domain
+	 * @param maxAge
+	 * @param httpOnly
 	 */
 	public static void addCookie(HttpServletRequest request, HttpServletResponse response, String name, String value,
 			String domain, int maxAge, boolean httpOnly) {
 		String contextPath = request.getContextPath();
-		if (contextPath == null || contextPath.isEmpty()) {
+		if (StringUtils.isBlank(contextPath)) {
 			contextPath = "/";
 		}
 		addCookie(request, response, name, value, domain, contextPath, maxAge, httpOnly);
@@ -109,6 +118,15 @@ public class WebUtils {
 
 	/**
 	 * add a cookie
+	 * 
+	 * @param request
+	 * @param response
+	 * @param name
+	 * @param value
+	 * @param domain
+	 * @param contextPath
+	 * @param maxAge
+	 * @param httpOnly
 	 */
 	public static void addCookie(HttpServletRequest request, HttpServletResponse response, String name, String value,
 			String domain, String contextPath, int maxAge, boolean httpOnly) {
@@ -117,13 +135,13 @@ public class WebUtils {
 			cookie.setMaxAge(maxAge);
 			cookie.setSecure(request.isSecure());
 
-			if (contextPath == null || contextPath.isEmpty()) {
+			if (StringUtils.isBlank(contextPath)) {
 				cookie.setPath("/");
 			} else {
 				cookie.setPath(contextPath);
 			}
 
-			if (domain != null && !domain.isEmpty()) {
+			if (StringUtils.isNotBlank(domain)) {
 				cookie.setDomain(domain);
 			}
 
@@ -132,7 +150,7 @@ public class WebUtils {
 			}
 
 			response.addCookie(cookie);
-			log.debug("Cookie update the sessionID.[name={},value={},maxAge={},httpOnly={},path={},domain={}]",
+			logger.debug("Cookie update the sessionID.[name={},value={},maxAge={},httpOnly={},path={},domain={}]",
 					cookie.getName(), cookie.getValue(), cookie.getMaxAge(), httpOnly, cookie.getPath(),
 					cookie.getDomain());
 		}
@@ -140,6 +158,12 @@ public class WebUtils {
 
 	/**
 	 * failure a cookie
+	 * 
+	 * @param request
+	 * @param response
+	 * @param name
+	 * @param domain
+	 * @param contextPath
 	 */
 	public static void failureCookie(HttpServletRequest request, HttpServletResponse response, String name,
 			String domain, String contextPath) {
@@ -150,11 +174,16 @@ public class WebUtils {
 
 	/**
 	 * failure a cookie
+	 * 
+	 * @param request
+	 * @param response
+	 * @param name
+	 * @param domain
 	 */
 	public static void failureCookie(HttpServletRequest request, HttpServletResponse response, String name,
 			String domain) {
 		String contextPath = request.getContextPath();
-		if (contextPath == null || contextPath.isEmpty()) {
+		if (StringUtils.isBlank(contextPath)) {
 			contextPath = "/";
 		}
 		failureCookie(request, response, name, domain, contextPath);
@@ -162,6 +191,10 @@ public class WebUtils {
 
 	/**
 	 * failure a cookie
+	 * 
+	 * @param request
+	 * @param response
+	 * @param name
 	 */
 	public static void failureCookie(HttpServletRequest request, HttpServletResponse response, String name) {
 		failureCookie(request, response, name, null);
@@ -177,10 +210,9 @@ public class WebUtils {
 	public static String getFullRequestUrl(HttpServletRequest request) {
 		StringBuilder buff = new StringBuilder(request.getRequestURL().toString());
 		String queryString = request.getQueryString();
-		if (queryString != null) {
+		if (StringUtils.isNotBlank(queryString)) {
 			buff.append("?").append(queryString);
 		}
-
 		return buff.toString();
 	}
 
@@ -217,17 +249,20 @@ public class WebUtils {
 
 	/**
 	 * get user agent
+	 * 
+	 * @param userAgent
+	 * @return
 	 */
 	public static UserAgent getUserAgent(String userAgent) {
-		if (userAgent == null || userAgent.isEmpty()) {
+		if (StringUtils.isBlank(userAgent)) {
 			return null;
 		}
 
-		for (String aAGENT_INDEX : AGENT_INDEX) {
-			Pattern pattern = AGENT_PATTERNS.get(aAGENT_INDEX);
+		for (String agentIdx : AGENT_INDEX) {
+			Pattern pattern = AGENT_PATTERNS.get(agentIdx);
 			Matcher matcher = pattern.matcher(userAgent);
 			if (matcher.find()) {
-				return new UserAgent(aAGENT_INDEX, matcher.group(1));
+				return new UserAgent(agentIdx, matcher.group(1));
 			}
 		}
 		return null;
@@ -235,6 +270,9 @@ public class WebUtils {
 
 	/**
 	 * get user agent
+	 * 
+	 * @param request
+	 * @return
 	 */
 	public static UserAgent getUserAgent(HttpServletRequest request) {
 		if (request == null) {
@@ -249,8 +287,8 @@ public class WebUtils {
 	 */
 	public static class UserAgent {
 
-		private String name = "";
-		private String version = "";
+		private String name;
+		private String version;
 
 		/**
 		 * @param name
@@ -258,7 +296,7 @@ public class WebUtils {
 		 * @param version
 		 *            agent version
 		 */
-		public UserAgent(String name, String version) {
+		private UserAgent(String name, String version) {
 			this.name = name;
 			this.version = version;
 		}

@@ -18,9 +18,8 @@ public class PropertiesReaderUtils {
 	 * @param classpath
 	 *            properties file classpath
 	 * @return Properties object
-	 * @throws IOException
 	 */
-	public static Properties read(String classpath) throws IOException {
+	public static Properties read(String classpath) {
 		final URL url = Resources.getResource(classpath);
 		final ByteSource byteSource = Resources.asByteSource(url);
 		final Properties properties = new Properties();
@@ -34,8 +33,8 @@ public class PropertiesReaderUtils {
 			if (inputStream != null) {
 				try {
 					inputStream.close();
-				} catch (final IOException ioException) {
-					throw ioException;
+				} catch (final IOException e) {
+					e.printStackTrace();
 				}
 			}
 		}
