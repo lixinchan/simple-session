@@ -5,10 +5,11 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 
-import com.google.common.io.ByteSource;
-import com.google.common.io.Resources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.io.ByteSource;
+import com.google.common.io.Resources;
 
 /**
  * @author clx 2018/4/3.
