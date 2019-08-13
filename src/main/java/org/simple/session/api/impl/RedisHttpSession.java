@@ -1,24 +1,22 @@
 package org.simple.session.api.impl;
 
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.Set;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import org.simple.session.api.SessionManager;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionContext;
-
-import org.simple.session.api.SessionManager;
-
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * HttpSession
- * 
+ *
  * @author clx 2018/4/3.
  */
 public class RedisHttpSession implements HttpSession {
@@ -73,7 +71,7 @@ public class RedisHttpSession implements HttpSession {
 
 	/**
 	 * load session
-	 * 
+	 *
 	 * @return session
 	 */
 	private Map<String, Object> loadSession() {
@@ -203,7 +201,7 @@ public class RedisHttpSession implements HttpSession {
 
 	/**
 	 * session attributes' snapshot
-	 * 
+	 *
 	 * @return session attributes' map object
 	 */
 	public Map<String, Object> snapshot() {

@@ -1,21 +1,20 @@
 package org.simple.session.core;
 
-import java.util.Properties;
-import java.util.Set;
-
 import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
-
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisSentinelPool;
 import redis.clients.jedis.exceptions.JedisException;
-import redis.clients.util.Pool;
+import redis.clients.jedis.util.Pool;
+
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * Jedis Pool Executor
- * 
+ *
  * @author clx 2018/4/3.
  */
 public class JedisPoolExecutor {

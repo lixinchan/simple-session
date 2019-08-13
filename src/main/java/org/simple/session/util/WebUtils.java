@@ -1,44 +1,40 @@
 package org.simple.session.util;
 
+import com.google.common.collect.ImmutableMap;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.ImmutableMap;
-
 /**
  * web util
- * 
+ *
  * @author clx 2018/4/1.
  */
-public class WebUtils {
+public final class WebUtils {
+	private WebUtils() {
+	}
 
-	private final static Logger logger = LoggerFactory.getLogger(WebUtils.class);
+	private static final Logger logger = LoggerFactory.getLogger(WebUtils.class);
 
 	/**
 	 * Headers about client's IP
 	 */
-	private static final String[] HEADERS_ABOUT_CLIENT_IP = { "X-Forwarded-For", "Proxy-Client-IP",
+	private static final String[] HEADERS_ABOUT_CLIENT_IP = {"X-Forwarded-For", "Proxy-Client-IP",
 			"WL-Proxy-Client-IP", "HTTP_X_FORWARDED_FOR", "HTTP_X_FORWARDED", "HTTP_X_CLUSTER_CLIENT_IP",
-			"HTTP_CLIENT_IP", "HTTP_FORWARDED_FOR", "HTTP_FORWARDED", "HTTP_VIA", "REMOTE_ADDR" };
-
-	private WebUtils() {
-	}
+			"HTTP_CLIENT_IP", "HTTP_FORWARDED_FOR", "HTTP_FORWARDED", "HTTP_VIA", "REMOTE_ADDR"};
 
 	/**
 	 * get client ip
-	 * 
-	 * @param request
-	 *            current request
+	 *
+	 * @param request current request
 	 * @return client ip
 	 */
 	public static String getClientIpAddr(HttpServletRequest request) {
@@ -53,11 +49,9 @@ public class WebUtils {
 
 	/**
 	 * find cookie from request
-	 * 
-	 * @param request
-	 *            current request
-	 * @param name
-	 *            cookie name
+	 *
+	 * @param request current request
+	 * @param name    cookie name
 	 * @return cookie value or null
 	 */
 	public static Cookie findCookie(HttpServletRequest request, String name) {
@@ -76,11 +70,9 @@ public class WebUtils {
 
 	/**
 	 * find cookie value
-	 * 
-	 * @param request
-	 *            current request
-	 * @param name
-	 *            cookie name
+	 *
+	 * @param request current request
+	 * @param name    cookie name
 	 * @return cookie value
 	 */
 	public static String findCookieValue(HttpServletRequest request, String name) {
@@ -92,13 +84,13 @@ public class WebUtils {
 	 * add a cookie
 	 */
 	public static void addCookie(HttpServletRequest request, HttpServletResponse response, String name, String value,
-			int maxAge) {
+								 int maxAge) {
 		addCookie(request, response, name, value, null, maxAge, false);
 	}
 
 	/**
 	 * add a cookie
-	 * 
+	 *
 	 * @param request
 	 * @param response
 	 * @param name
@@ -108,7 +100,7 @@ public class WebUtils {
 	 * @param httpOnly
 	 */
 	public static void addCookie(HttpServletRequest request, HttpServletResponse response, String name, String value,
-			String domain, int maxAge, boolean httpOnly) {
+								 String domain, int maxAge, boolean httpOnly) {
 		String contextPath = request.getContextPath();
 		if (StringUtils.isBlank(contextPath)) {
 			contextPath = "/";
@@ -118,7 +110,7 @@ public class WebUtils {
 
 	/**
 	 * add a cookie
-	 * 
+	 *
 	 * @param request
 	 * @param response
 	 * @param name
@@ -129,7 +121,7 @@ public class WebUtils {
 	 * @param httpOnly
 	 */
 	public static void addCookie(HttpServletRequest request, HttpServletResponse response, String name, String value,
-			String domain, String contextPath, int maxAge, boolean httpOnly) {
+								 String domain, String contextPath, int maxAge, boolean httpOnly) {
 		if (request != null && response != null) {
 			Cookie cookie = new Cookie(name, value);
 			cookie.setMaxAge(maxAge);
@@ -158,7 +150,7 @@ public class WebUtils {
 
 	/**
 	 * failure a cookie
-	 * 
+	 *
 	 * @param request
 	 * @param response
 	 * @param name
@@ -166,7 +158,7 @@ public class WebUtils {
 	 * @param contextPath
 	 */
 	public static void failureCookie(HttpServletRequest request, HttpServletResponse response, String name,
-			String domain, String contextPath) {
+									 String domain, String contextPath) {
 		if (request != null && response != null) {
 			addCookie(request, response, name, null, domain, contextPath, 0, true);
 		}
@@ -174,14 +166,14 @@ public class WebUtils {
 
 	/**
 	 * failure a cookie
-	 * 
+	 *
 	 * @param request
 	 * @param response
 	 * @param name
 	 * @param domain
 	 */
 	public static void failureCookie(HttpServletRequest request, HttpServletResponse response, String name,
-			String domain) {
+									 String domain) {
 		String contextPath = request.getContextPath();
 		if (StringUtils.isBlank(contextPath)) {
 			contextPath = "/";
@@ -191,7 +183,7 @@ public class WebUtils {
 
 	/**
 	 * failure a cookie
-	 * 
+	 *
 	 * @param request
 	 * @param response
 	 * @param name
@@ -202,9 +194,8 @@ public class WebUtils {
 
 	/**
 	 * get request full url, include params
-	 * 
-	 * @param request
-	 *            current request
+	 *
+	 * @param request current request
 	 * @return request full url, include params
 	 */
 	public static String getFullRequestUrl(HttpServletRequest request) {
@@ -218,11 +209,10 @@ public class WebUtils {
 
 	/**
 	 * redirect to url
-	 * 
+	 *
 	 * @param response
 	 * @param url
-	 * @param movePermanently
-	 *            true 301 for permanent redirect, false 302(temporary redirect)
+	 * @param movePermanently true 301 for permanent redirect, false 302(temporary redirect)
 	 * @throws IOException
 	 */
 	public static void redirect(HttpServletResponse response, String url, boolean movePermanently) throws IOException {
@@ -237,7 +227,7 @@ public class WebUtils {
 	/**
 	 * browsers
 	 */
-	private static final String[] AGENT_INDEX = { "MSIE", "Firefox", "Chrome", "Opera", "Safari" };
+	private static final String[] AGENT_INDEX = {"MSIE", "Firefox", "Chrome", "Opera", "Safari"};
 
 	/**
 	 * map regex for browsers
@@ -249,7 +239,7 @@ public class WebUtils {
 
 	/**
 	 * get user agent
-	 * 
+	 *
 	 * @param userAgent
 	 * @return
 	 */
@@ -270,7 +260,7 @@ public class WebUtils {
 
 	/**
 	 * get user agent
-	 * 
+	 *
 	 * @param request
 	 * @return
 	 */
@@ -291,10 +281,8 @@ public class WebUtils {
 		private String version;
 
 		/**
-		 * @param name
-		 *            agent name
-		 * @param version
-		 *            agent version
+		 * @param name    agent name
+		 * @param version agent version
 		 */
 		private UserAgent(String name, String version) {
 			this.name = name;

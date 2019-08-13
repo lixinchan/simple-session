@@ -1,42 +1,29 @@
 package org.simple.session.api.impl;
 
-import java.util.Map;
-
+import com.google.common.base.Throwables;
 import org.simple.session.api.JsonSerializer;
 import org.simple.session.exception.SerializeException;
+import org.simple.session.util.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Throwables;
+import java.util.Map;
 
 /**
  * FastJson Serializer
- * 
+ *
  * @author clx 2018/4/3.
  */
 public class FastJsonSerializer implements JsonSerializer {
 
-	private final static Logger log = LoggerFactory.getLogger(FastJsonSerializer.class);
-
-	private final ObjectMapper objectMapper;
-
-	private final JavaType mapType;
-
-	public FastJsonSerializer() {
-		objectMapper = new ObjectMapper();
-		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-		mapType = objectMapper.getTypeFactory().constructParametricType(Map.class, String.class, Object.class);
-	}
+	private static final Logger logger = LoggerFactory.getLogger(FastJsonSerializer.class);
 
 	@Override
 	public String serialize(Object o) {
 		try {
-			return objectMapper.writeValueAsString(o);
+			return JsonUtils.toJsonStr(o);
 		} catch (Exception e) {
-			log.error("failed to serialize http session {} to json,cause:{}", o, Throwables.getStackTraceAsString(e));
+			logger.error("failed to serialize http session {} to json,cause:{}", o, Throwables.getStackTraceAsString(e));
 			throw new SerializeException("failed to serialize http session to json", e);
 		}
 	}
@@ -44,9 +31,9 @@ public class FastJsonSerializer implements JsonSerializer {
 	@Override
 	public Map<String, Object> deserialize(String o) {
 		try {
-			return objectMapper.readValue(o, mapType);
+			return (Map<String, Object>) JsonUtils.jsonToLocal(o);
 		} catch (Exception e) {
-			log.error("failed to deserialize string  {} to http session,cause:{} ", o,
+			logger.error("failed to deserialize string  {} to http session,cause:{} ", o,
 					Throwables.getStackTraceAsString(e));
 			throw new SerializeException("failed to deserialize string to http session", e);
 		}

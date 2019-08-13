@@ -1,20 +1,24 @@
 package org.simple.session.api.impl;
 
-import javax.servlet.http.*;
-
 import org.simple.session.api.SessionManager;
 import org.simple.session.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 /**
  * Redis HttpServletRequest
- * 
+ *
  * @author clx 2018/4/3.
  */
 public class RedisHttpServletRequest extends HttpServletRequestWrapper {
 
-	private final static Logger logger = LoggerFactory.getLogger(RedisHttpServletRequest.class);
+	private static final Logger logger = LoggerFactory.getLogger(RedisHttpServletRequest.class);
 
 	private HttpServletRequest request;
 
@@ -35,7 +39,7 @@ public class RedisHttpServletRequest extends HttpServletRequestWrapper {
 	private int cookieMaxAge;
 
 	public RedisHttpServletRequest(HttpServletRequest request, HttpServletResponse response,
-			SessionManager sessionManager) {
+								   SessionManager sessionManager) {
 		super(request);
 		this.request = request;
 		this.response = response;
@@ -64,9 +68,8 @@ public class RedisHttpServletRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * set session id in cookie
-	 * 
-	 * @param sessionCookieName
-	 *            session name in cookie
+	 *
+	 * @param sessionCookieName session name in cookie
 	 */
 	public void setSessionCookieName(String sessionCookieName) {
 		this.sessionCookieName = sessionCookieName;
@@ -74,7 +77,7 @@ public class RedisHttpServletRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * get cookie cookie's domain
-	 * 
+	 *
 	 * @return cookie's store domain
 	 */
 	public String getCookieDomain() {
@@ -90,7 +93,7 @@ public class RedisHttpServletRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * get cookie's store path
-	 * 
+	 *
 	 * @return cookie's store path
 	 */
 	public String getCookieContextPath() {
@@ -113,9 +116,8 @@ public class RedisHttpServletRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * set cookie max age
-	 * 
-	 * @param cookieMaxAge
-	 *            cookie max age
+	 *
+	 * @param cookieMaxAge cookie max age
 	 */
 	public void setCookieMaxAge(int cookieMaxAge) {
 		this.cookieMaxAge = cookieMaxAge;
@@ -123,7 +125,7 @@ public class RedisHttpServletRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * get current session instance
-	 * 
+	 *
 	 * @return current session instance
 	 */
 	public RedisHttpSession currentSession() {
@@ -132,9 +134,8 @@ public class RedisHttpServletRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * get session from session cookie name
-	 * 
-	 * @param create
-	 *            if true create
+	 *
+	 * @param create if true create
 	 * @return session
 	 */
 	private HttpSession doGetSession(boolean create) {
@@ -155,11 +156,9 @@ public class RedisHttpServletRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * build a new session from session id
-	 * 
-	 * @param id
-	 *            session id
-	 * @param refresh
-	 *            refresh cookie or not
+	 *
+	 * @param id      session id
+	 * @param refresh refresh cookie or not
 	 * @return session
 	 */
 	private RedisHttpSession buildSession(String id, boolean refresh) {
@@ -174,9 +173,8 @@ public class RedisHttpServletRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * build a new session
-	 * 
-	 * @param create
-	 *            create session or not
+	 *
+	 * @param create create session or not
 	 * @return session
 	 */
 	private RedisHttpSession buildSession(boolean create) {

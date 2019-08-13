@@ -1,12 +1,6 @@
 package org.simple.session.api.filter;
 
-import java.io.IOException;
-import java.util.Map;
-
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.google.common.base.Strings;
 import org.simple.session.api.SessionManager;
 import org.simple.session.api.impl.RedisHttpServletRequest;
 import org.simple.session.api.impl.RedisHttpSession;
@@ -14,16 +8,25 @@ import org.simple.session.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Strings;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Map;
 
 /**
  * Abstract Session Filter
- * 
+ *
  * @author clx 2018/4/3.
  */
 public abstract class AbstractSessionFilter implements Filter {
 
-	private final static Logger logger = LoggerFactory.getLogger(AbstractSessionFilter.class);
+	private static final Logger logger = LoggerFactory.getLogger(AbstractSessionFilter.class);
 
 	protected final static String SESSION_COOKIE_NAME = "sessionCookieName";
 
@@ -88,7 +91,7 @@ public abstract class AbstractSessionFilter implements Filter {
 
 	/**
 	 * subclass create session manager
-	 * 
+	 *
 	 * @return session manager
 	 * @throws IOException
 	 */
@@ -96,9 +99,8 @@ public abstract class AbstractSessionFilter implements Filter {
 
 	/**
 	 * init basic attribute
-	 * 
-	 * @param config
-	 *            the filter config
+	 *
+	 * @param config the filter config
 	 */
 	private final void initAttrs(FilterConfig config) {
 		String param = config.getInitParameter(SESSION_COOKIE_NAME);

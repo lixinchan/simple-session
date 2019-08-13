@@ -1,24 +1,23 @@
 package org.simple.session.api;
 
-import java.util.Properties;
-
+import com.google.common.base.Strings;
+import com.google.common.base.Throwables;
 import org.simple.session.api.impl.DefaultSessionIdGenerator;
 import org.simple.session.api.impl.FastJsonSerializer;
 import org.simple.session.util.PropertiesReaderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Strings;
-import com.google.common.base.Throwables;
+import java.util.Properties;
 
 /**
  * Abstract Session Manager
- * 
+ *
  * @author clx 2018/4/3.
  */
 public abstract class AbstractSessionManager implements SessionManager {
 
-	private final static Logger logger = LoggerFactory.getLogger(AbstractSessionManager.class);
+	private static final Logger logger = LoggerFactory.getLogger(AbstractSessionManager.class);
 
 	private static final String DEFAULT_PROPERTIES = "session.properties";
 
@@ -31,8 +30,7 @@ public abstract class AbstractSessionManager implements SessionManager {
 	}
 
 	/**
-	 * @param propertiesFile
-	 *            properties file in classpath, default is session.properties
+	 * @param propertiesFile properties file in classpath, default is session.properties
 	 */
 	public AbstractSessionManager(String propertiesFile) {
 		Properties properties = PropertiesReaderUtils.read(propertiesFile);
@@ -43,7 +41,7 @@ public abstract class AbstractSessionManager implements SessionManager {
 
 	/**
 	 * 提供一个构造函数，接受Properties作为入口参数
-	 * 
+	 *
 	 * @param properties
 	 */
 	public AbstractSessionManager(Properties properties) {
