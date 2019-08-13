@@ -3,7 +3,7 @@ package org.simple.session.api;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 import org.simple.session.api.impl.DefaultSessionIdGenerator;
-import org.simple.session.api.impl.FastJsonSerializer;
+import org.simple.session.api.impl.JsonSerializer;
 import org.simple.session.util.PropertiesReaderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ public abstract class AbstractSessionManager implements SessionManager {
 
 	protected SessionIdGenerator sessionIdGenerator;
 
-	protected JsonSerializer jsonSerializer;
+	protected org.simple.session.api.JsonSerializer jsonSerializer;
 
 	public AbstractSessionManager() {
 		this(DEFAULT_PROPERTIES);
@@ -59,16 +59,16 @@ public abstract class AbstractSessionManager implements SessionManager {
 	private void initJsonSerializer(Properties properties) {
 		String sessionSerializer = (String) properties.get("session.serializer");
 		if (Strings.isNullOrEmpty(sessionSerializer)) {
-			jsonSerializer = new FastJsonSerializer();
+			jsonSerializer = new JsonSerializer();
 		} else {
 			try {
-				jsonSerializer = (JsonSerializer) (Class.forName(sessionSerializer).newInstance());
+				jsonSerializer = (org.simple.session.api.JsonSerializer) (Class.forName(sessionSerializer).newInstance());
 			} catch (Exception e) {
 				logger.error("failed to init json generator: {}", Throwables.getStackTraceAsString(e));
 			} finally {
 				if (sessionIdGenerator == null) {
 					logger.info("use default json serializer [FastJsonSerializer]");
-					jsonSerializer = new FastJsonSerializer();
+					jsonSerializer = new JsonSerializer();
 				}
 			}
 		}

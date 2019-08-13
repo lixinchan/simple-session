@@ -1,7 +1,6 @@
 package org.simple.session.api.impl;
 
 import com.google.common.base.Throwables;
-import org.simple.session.api.JsonSerializer;
 import org.simple.session.exception.SerializeException;
 import org.simple.session.util.JsonUtils;
 import org.slf4j.Logger;
@@ -10,13 +9,13 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 
 /**
- * FastJson Serializer
+ * Serializer
  *
  * @author clx 2018/4/3.
  */
-public class FastJsonSerializer implements JsonSerializer {
+public class JsonSerializer implements org.simple.session.api.JsonSerializer {
 
-	private static final Logger logger = LoggerFactory.getLogger(FastJsonSerializer.class);
+	private static final Logger logger = LoggerFactory.getLogger(JsonSerializer.class);
 
 	@Override
 	public String serialize(Object o) {
